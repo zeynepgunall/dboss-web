@@ -1,17 +1,32 @@
 import { useState, useEffect } from 'react';
-import { getThreads } from '../api';
+import { getThreads, deleteThread } from '../api';
 
-export default function Sidebar({ token, selectedThreadId, onSelectThread, onNewThread, refreshKey }) {
+export default function Sidebar({ token, selectedThreadId, onSelectThread, onNewThread, onDeleteThread, refreshKey }) {
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
     getThreads(token)
-      .then(setThreads)
-      .catch(() => {})
+      .then(data => { setThreads(data); })
+      .catch(() => setError('Sohbetler yüklenemedi.'))
       .finally(() => setLoading(false));
-  }, [refreshKey]);
+  }, [refreshKey, retryKey]);
+
+  async function handleDelete(e, threadId) {
+    e.stopPropagation();
+    if (!window.confirm('Bu sohbet silinsin mi?')) return;
+    try {
+      await deleteThread(token, threadId);
+      setThreads(prev => prev.filter(t => t.id !== threadId));
+      if (threadId === selectedThreadId) onDeleteThread(threadId);
+    } catch {
+      // sessiz başarısızlık
+    }
+  }
 
   return (
     <aside className="sidebar">
@@ -19,7 +34,14 @@ export default function Sidebar({ token, selectedThreadId, onSelectThread, onNew
 
       {loading && <p className="sidebar-hint">Yükleniyor…</p>}
 
-      {!loading && threads.length === 0 && (
+      {error && (
+        <div className="sidebar-error">
+          <span>{error}</span>
+          <button onClick={() => setRetryKey(k => k + 1)}>Tekrar dene</button>
+        </div>
+      )}
+
+      {!loading && !error && threads.length === 0 && (
         <p className="sidebar-hint">Henüz sohbet yok.</p>
       )}
 
@@ -30,7 +52,12 @@ export default function Sidebar({ token, selectedThreadId, onSelectThread, onNew
             className={`thread-item${t.id === selectedThreadId ? ' active' : ''}`}
             onClick={() => onSelectThread(t.id)}
           >
-            {t.title || 'Yeni sohbet'}
+            <span className="thread-title">{t.title || 'Yeni sohbet'}</span>
+            <button
+              className="delete-btn"
+              onClick={e => handleDelete(e, t.id)}
+              title="Sohbeti sil"
+            >×</button>
           </li>
         ))}
       </ul>

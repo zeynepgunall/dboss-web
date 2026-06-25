@@ -39,6 +39,14 @@ export async function sendChat(token, threadId, content) {
   return res.json();
 }
 
+export async function deleteThread(token, threadId) {
+  const res = await fetch(`${API_URL}/threads/${threadId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  checkStatus(res, 'Sohbet silinemedi.');
+}
+
 export async function createThread(token) {
   const res = await fetch(`${API_URL}/threads`, {
     method: 'POST',

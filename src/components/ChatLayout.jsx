@@ -10,6 +10,9 @@ export default function ChatLayout({ token, onLogout }) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [messagesRefreshKey, setMessagesRefreshKey] = useState(0);
   const [sending, setSending] = useState(false);
+  const [pendingMessage, setPendingMessage] = useState(null);
+  const [inputText, setInputText] = useState('');
+  const [sendError, setSendError] = useState(null);
 
   function handleNewThread() {
     setSelectedThreadId(null);
@@ -21,7 +24,16 @@ export default function ChatLayout({ token, onLogout }) {
     setIsDraft(false);
   }
 
+  function handleDeleteThread(id) {
+    if (selectedThreadId === id) {
+      setSelectedThreadId(null);
+      setIsDraft(false);
+    }
+  }
+
   async function handleSend(content) {
+    setSendError(null);
+    setPendingMessage(content);
     setSending(true);
     try {
       let threadId = selectedThreadId;
@@ -33,11 +45,13 @@ export default function ChatLayout({ token, onLogout }) {
         setRefreshKey(k => k + 1);
       }
       await sendChat(token, threadId, content);
+      setInputText('');
       setMessagesRefreshKey(k => k + 1);
       setRefreshKey(k => k + 1);
     } catch {
-      // ileride hata mesajı eklenebilir
+      setSendError('Mesaj gönderilemedi. Tekrar dene.');
     } finally {
+      setPendingMessage(null);
       setSending(false);
     }
   }
@@ -51,6 +65,7 @@ export default function ChatLayout({ token, onLogout }) {
         selectedThreadId={selectedThreadId}
         onSelectThread={handleSelectThread}
         onNewThread={handleNewThread}
+        onDeleteThread={handleDeleteThread}
         refreshKey={refreshKey}
       />
       <main className="chat-main">
@@ -61,11 +76,20 @@ export default function ChatLayout({ token, onLogout }) {
                 token={token}
                 threadId={selectedThreadId}
                 messagesRefreshKey={messagesRefreshKey}
+                isTyping={sending}
+                pendingMessage={pendingMessage}
               />
             : <p className="chat-hint">Bir sohbet seç veya yeni başlat.</p>
         }
-        {sending && <p className="sending-hint">Yanıt bekleniyor…</p>}
-        {showInput && <MessageInput onSend={handleSend} disabled={sending} />}
+        {showInput && (
+          <MessageInput
+            value={inputText}
+            onChange={setInputText}
+            onSend={handleSend}
+            disabled={sending}
+            error={sendError}
+          />
+        )}
         <button className="logout-btn" onClick={onLogout}>Çıkış Yap</button>
       </main>
     </div>

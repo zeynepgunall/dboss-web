@@ -1,8 +1,4 @@
-import { useState } from 'react';
-
-export default function MessageInput({ onSend, disabled }) {
-  const [text, setText] = useState('');
-
+export default function MessageInput({ value, onChange, onSend, disabled, error }) {
   function handleKeyDown(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -11,24 +7,26 @@ export default function MessageInput({ onSend, disabled }) {
   }
 
   function submit() {
-    const trimmed = text.trim();
+    const trimmed = value.trim();
     if (!trimmed || disabled) return;
     onSend(trimmed);
-    setText('');
   }
 
   return (
     <div className="message-input-area">
+      {error && (
+        <p className="send-error">{error}</p>
+      )}
       <div className="message-input-row">
         <textarea
           rows={1}
-          value={text}
-          onChange={e => setText(e.target.value)}
+          value={value}
+          onChange={e => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Bir mesaj yaz… (Enter = gönder, Shift+Enter = yeni satır)"
           disabled={disabled}
         />
-        <button onClick={submit} disabled={disabled || !text.trim()}>
+        <button onClick={submit} disabled={disabled || !value.trim()}>
           Gönder
         </button>
       </div>
