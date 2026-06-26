@@ -2,6 +2,18 @@ import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { getMessages } from '../api';
 
+const markdownComponents = {
+  code({ node, inline, className, children, ...props }) {
+    const isInline = inline || !String(children).includes('\n');
+    return isInline
+      ? <code className="md-inline-code" {...props}>{children}</code>
+      : <code className={`md-block-code ${className || ''}`} {...props}>{children}</code>;
+  },
+  pre({ children }) {
+    return <pre className="md-pre">{children}</pre>;
+  },
+};
+
 export default function MessageList({ token, threadId, messagesRefreshKey, isTyping, pendingMessage }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +73,7 @@ export default function MessageList({ token, threadId, messagesRefreshKey, isTyp
       {messages.map(msg => (
         <div key={msg.id} className={`message-bubble ${msg.role}`}>
           {msg.role === 'assistant'
-            ? <ReactMarkdown>{msg.content}</ReactMarkdown>
+            ? <ReactMarkdown components={markdownComponents}>{msg.content}</ReactMarkdown>
             : msg.content
           }
         </div>
