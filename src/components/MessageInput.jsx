@@ -1,4 +1,4 @@
-export default function MessageInput({ value, onChange, onSend, disabled, error }) {
+export default function MessageInput({ value, onChange, onSend, disabled, error, topSlot }) {
   function handleKeyDown(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -14,6 +14,7 @@ export default function MessageInput({ value, onChange, onSend, disabled, error 
 
   return (
     <div className="message-input-area">
+      {topSlot && <div className="model-selector-row">{topSlot}</div>}
       {error && (
         <p className="send-error">{error}</p>
       )}

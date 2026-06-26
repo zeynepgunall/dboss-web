@@ -73,7 +73,14 @@ export default function MessageList({ token, threadId, messagesRefreshKey, isTyp
       {messages.map(msg => (
         <div key={msg.id} className={`message-bubble ${msg.role}`}>
           {msg.role === 'assistant'
-            ? <ReactMarkdown components={markdownComponents}>{msg.content}</ReactMarkdown>
+            ? <>
+                <ReactMarkdown components={markdownComponents}>{msg.content}</ReactMarkdown>
+                {msg.model && (
+                  <span className="msg-model-label">
+                    {msg.model.includes('/') ? msg.model.split('/').pop() : msg.model}
+                  </span>
+                )}
+              </>
             : msg.content
           }
         </div>

@@ -10,6 +10,12 @@ function checkStatus(res, errorMsg) {
   if (!res.ok) throw new Error(errorMsg);
 }
 
+export async function getModels() {
+  const res = await fetch(`${API_URL}/models`);
+  if (!res.ok) throw new Error('Model listesi alınamadı.');
+  return res.json();
+}
+
 export async function getThreads(token) {
   const res = await fetch(`${API_URL}/threads`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -26,14 +32,14 @@ export async function getMessages(token, threadId) {
   return res.json();
 }
 
-export async function sendChat(token, threadId, content) {
+export async function sendChat(token, threadId, content, model) {
   const res = await fetch(`${API_URL}/threads/${threadId}/chat`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ content }),
+    body: JSON.stringify({ content, ...(model ? { model } : {}) }),
   });
   checkStatus(res, 'Mesaj gönderilemedi.');
   return res.json();

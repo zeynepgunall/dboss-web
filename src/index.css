@@ -340,3 +340,35 @@ body {
   color: #dc2626;
   margin: 0 0 0.4rem;
 }
+
+.model-selector-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.model-selector {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.82rem;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+}
+.model-selector:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.model-selector-loading {
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+
+.msg-model-label {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  color: #9ca3af;
+}

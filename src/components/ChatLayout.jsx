@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Sidebar from './Sidebar';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
+import ModelSelector from './ModelSelector';
 import { createThread, sendChat } from '../api';
 
 export default function ChatLayout({ token, onLogout }) {
@@ -13,6 +14,7 @@ export default function ChatLayout({ token, onLogout }) {
   const [pendingMessage, setPendingMessage] = useState(null);
   const [inputText, setInputText] = useState('');
   const [sendError, setSendError] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
 
   function handleNewThread() {
     setSelectedThreadId(null);
@@ -44,7 +46,7 @@ export default function ChatLayout({ token, onLogout }) {
         setIsDraft(false);
         setRefreshKey(k => k + 1);
       }
-      await sendChat(token, threadId, content);
+      await sendChat(token, threadId, content, selectedModel);
       setInputText('');
       setMessagesRefreshKey(k => k + 1);
       setRefreshKey(k => k + 1);
@@ -88,6 +90,7 @@ export default function ChatLayout({ token, onLogout }) {
             onSend={handleSend}
             disabled={sending}
             error={sendError}
+            topSlot={<ModelSelector value={selectedModel} onChange={setSelectedModel} />}
           />
         )}
         <button className="logout-btn" onClick={onLogout}>Çıkış Yap</button>
