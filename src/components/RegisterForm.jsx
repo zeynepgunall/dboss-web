@@ -38,23 +38,37 @@ export default function RegisterForm({ onGoLogin }) {
       <div className="form-card">
         <h2>Kayıt Ol</h2>
         {success ? (
-          <p style={{ color: '#16a34a' }}>Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz…</p>
+          <p style={{ color: '#16a34a' }}>
+            Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz…
+          </p>
         ) : (
           <form onSubmit={handleSubmit}>
             <label>
               Kullanıcı Adı
-              <input value={username} onChange={e => setUsername(e.target.value)}
-                required autoFocus />
+              <input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                autoFocus
+              />
             </label>
             <label>
               E-posta
-              <input type="email" value={email}
-                onChange={e => setEmail(e.target.value)} required />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </label>
             <label>
               Şifre
-              <input type="password" value={password}
-                onChange={e => setPassword(e.target.value)} required />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </label>
             {error && <p className="error">{error}</p>}
             <button type="submit" disabled={loading}>
@@ -64,7 +78,9 @@ export default function RegisterForm({ onGoLogin }) {
         )}
         <p style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
           Zaten hesabın var mı?{' '}
-          <button className="link-btn" onClick={onGoLogin}>Giriş yap</button>
+          <button className="link-btn" onClick={onGoLogin}>
+            Giriş yap
+          </button>
         </p>
       </div>
     </div>

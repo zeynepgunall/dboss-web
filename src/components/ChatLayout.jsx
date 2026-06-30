@@ -44,12 +44,12 @@ export default function ChatLayout({ token, onLogout }) {
         threadId = thread.id;
         setSelectedThreadId(threadId);
         setIsDraft(false);
-        setRefreshKey(k => k + 1);
+        setRefreshKey((k) => k + 1);
       }
       await sendChat(token, threadId, content, selectedModel);
       setInputText('');
-      setMessagesRefreshKey(k => k + 1);
-      setRefreshKey(k => k + 1);
+      setMessagesRefreshKey((k) => k + 1);
+      setRefreshKey((k) => k + 1);
     } catch {
       setSendError('Mesaj gönderilemedi. Tekrar dene.');
     } finally {
@@ -71,18 +71,19 @@ export default function ChatLayout({ token, onLogout }) {
         refreshKey={refreshKey}
       />
       <main className="chat-main">
-        {isDraft
-          ? <p className="chat-hint">Yeni sohbet — bir mesaj yazarak başla.</p>
-          : selectedThreadId
-            ? <MessageList
-                token={token}
-                threadId={selectedThreadId}
-                messagesRefreshKey={messagesRefreshKey}
-                isTyping={sending}
-                pendingMessage={pendingMessage}
-              />
-            : <p className="chat-hint">Bir sohbet seç veya yeni başlat.</p>
-        }
+        {isDraft ? (
+          <p className="chat-hint">Yeni sohbet — bir mesaj yazarak başla.</p>
+        ) : selectedThreadId ? (
+          <MessageList
+            token={token}
+            threadId={selectedThreadId}
+            messagesRefreshKey={messagesRefreshKey}
+            isTyping={sending}
+            pendingMessage={pendingMessage}
+          />
+        ) : (
+          <p className="chat-hint">Bir sohbet seç veya yeni başlat.</p>
+        )}
         {showInput && (
           <MessageInput
             value={inputText}
@@ -93,7 +94,9 @@ export default function ChatLayout({ token, onLogout }) {
             topSlot={<ModelSelector value={selectedModel} onChange={setSelectedModel} />}
           />
         )}
-        <button className="logout-btn" onClick={onLogout}>Çıkış Yap</button>
+        <button className="logout-btn" onClick={onLogout}>
+          Çıkış Yap
+        </button>
       </main>
     </div>
   );

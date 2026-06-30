@@ -39,18 +39,36 @@ export default function LoginForm({ onLogin, onGoRegister }) {
         <form onSubmit={handleSubmit}>
           <label>
             Kullanıcı Adı
-            <input value={username} onChange={e => setUsername(e.target.value)}
-              required autoFocus />
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              autoFocus
+            />
           </label>
           <label>
             Şifre
-            <input type="password" value={password}
-              onChange={e => setPassword(e.target.value)} required />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </label>
-          <label style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}>
-            <input type="checkbox" checked={rememberMe}
-              onChange={e => setRememberMe(e.target.checked)}
-              style={{ display: 'inline', width: 'auto', marginTop: 0 }} />
+          <label
+            style={{
+              display: 'flex',
+              gap: '0.5rem',
+              alignItems: 'center',
+              marginBottom: '0.5rem',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              style={{ display: 'inline', width: 'auto', marginTop: 0 }}
+            />
             Beni hatırla
           </label>
           {error && <p className="error">{error}</p>}
@@ -60,7 +78,9 @@ export default function LoginForm({ onLogin, onGoRegister }) {
         </form>
         <p style={{ marginTop: '1rem', fontSize: '0.9rem' }}>
           Hesabın yok mu?{' '}
-          <button className="link-btn" onClick={onGoRegister}>Kayıt ol</button>
+          <button className="link-btn" onClick={onGoRegister}>
+            Kayıt ol
+          </button>
         </p>
       </div>
     </div>

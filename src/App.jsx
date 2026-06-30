@@ -9,7 +9,9 @@ export default function App() {
   const [view, setView] = useState('login');
 
   useEffect(() => {
-    function handleAuthExpired() { setToken(null); }
+    function handleAuthExpired() {
+      setToken(null);
+    }
     window.addEventListener('authExpired', handleAuthExpired);
     return () => window.removeEventListener('authExpired', handleAuthExpired);
   }, []);
@@ -32,10 +34,5 @@ export default function App() {
     return <RegisterForm onGoLogin={() => setView('login')} />;
   }
 
-  return (
-    <LoginForm
-      onLogin={handleLogin}
-      onGoRegister={() => setView('register')}
-    />
-  );
+  return <LoginForm onLogin={handleLogin} onGoRegister={() => setView('register')} />;
 }
