@@ -29,7 +29,7 @@ export default function MessageInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Bir mesaj yaz… (Enter = gönder, Shift+Enter = yeni satır)"
+          placeholder="Bir mesaj yaz…"
           disabled={disabled}
         />
         <button onClick={submit} disabled={disabled || !value.trim()}>
