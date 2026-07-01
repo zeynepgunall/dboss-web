@@ -45,7 +45,8 @@ export default function Sidebar({
     try {
       await deleteThread(token, threadId);
       setThreads((prev) => prev.filter((t) => t.id !== threadId));
-      if (threadId === selectedThreadId) onDeleteThread(threadId);
+      // selectedThreadId URL'den string gelir; id'ler sayı olabilir → string karşılaştır.
+      if (String(threadId) === String(selectedThreadId)) onDeleteThread(threadId);
     } catch {
       // sessiz başarısızlık
     }
@@ -74,7 +75,7 @@ export default function Sidebar({
         {threads.map((t) => (
           <li
             key={t.id}
-            className={`thread-item${t.id === selectedThreadId ? ' active' : ''}`}
+            className={`thread-item${String(t.id) === String(selectedThreadId) ? ' active' : ''}`}
             onClick={() => onSelectThread(t.id)}
           >
             <span className="thread-title">{t.title || 'Yeni sohbet'}</span>
